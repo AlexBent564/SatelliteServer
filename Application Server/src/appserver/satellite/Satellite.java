@@ -165,7 +165,7 @@ public class Satellite extends Thread {
         ObjectInputStream readFromNet = null;
         ObjectOutputStream writeToNet = null;
         Message message = null;
-
+        
         SatelliteThread(Socket jobRequest, Satellite satellite) {
             this.jobRequest = jobRequest;
             this.satellite = satellite;
@@ -174,10 +174,30 @@ public class Satellite extends Thread {
         @Override
         public void run() {
             // setting up object streams
-            // ...
+            try
+            {
+                readFromNet = new ObjectInputStream( jobRequest.getInputStream() );
+                writeToNet = new ObjectOutputStream( jobRequest.getOutputStream() );
+                System.out.println( "[SatelliteThread.run] Object streams sucessfully set up!" );
+            }
+            catch( IOException e )
+            {
+                System.out.println( "[SatelliteThread.run] Could not set up object streams, bailing now..." );
+                e.printStackTrace();
+                System.exit( 1 );
+            }
             
             // reading message
-            // ...
+            try
+            {
+                message = (Message) readFromNet.readObject();
+            }
+            catch( IOException | ClassNotFoundException e )
+            {
+                System.out.println( "[SatelliteThread.run] Could not read object stream, bailing now..." );
+                e.printStackTrace();
+                System.exit( 1 );
+            }
             
             switch (message.getType()) {
                 case JOB_REQUEST:
@@ -211,3 +231,4 @@ public class Satellite extends Thread {
         satellite.run();
     }
 }
+
