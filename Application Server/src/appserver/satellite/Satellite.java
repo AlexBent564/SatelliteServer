@@ -18,6 +18,7 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import utils.PropertyHandler;
+import java.util.HashMap;
 
 /**
  * Class [Satellite] Instances of this class represent computing nodes that execute jobs by
@@ -31,7 +32,8 @@ public class Satellite extends Thread {
     private ConnectivityInfo satelliteInfo = new ConnectivityInfo();
     private ConnectivityInfo serverInfo = new ConnectivityInfo();
     private HTTPClassLoader classLoader = null;
-    private Hashtable toolsCache = null;
+//    private Hashtable toolsCache = null;
+    private HashMap <String, Tool> toolsCache = new HashMap<>();
     static ServerSocket serverSocket;
     static int port;
     protected Socket socket;
@@ -128,6 +130,7 @@ public class Satellite extends Thread {
             port = serverInfo.getPort();
             serverSocket = new ServerSocket( port );
             System.out.println( "[Satellite.run] Server socket created on port #" + port );
+            
         }
         catch( IOException e )
         {
@@ -146,6 +149,11 @@ public class Satellite extends Thread {
                 System.out.println( "[Satellite.run] Waiting for connections on port #" + port );
                 socket = serverSocket.accept();
                 System.out.println( "[Satellite.run] A connection has been established!" );
+                
+                // not sure if this is correct, but the above comment states that we should take job requests which is what the 
+                SatelliteThread satelliteThread = new SatelliteThread(socket, this);
+                satelliteThread.run();
+                
                 
             }
             catch( IOException e )
@@ -201,8 +209,17 @@ public class Satellite extends Thread {
             
             switch (message.getType()) {
                 case JOB_REQUEST:
-                    // processing job request
-                    // ...
+                    // processing job request\
+                    Tool jobTool;
+                    
+                    try {
+                        jobTool = getToolObject((String)message.getContent());
+                    }
+                    catch ( UnknownToolException | ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                    {
+                        e.printStackTrace();
+                    }
+                    
                     break;
 
                 default:
@@ -218,17 +235,27 @@ public class Satellite extends Thread {
      */
     public Tool getToolObject(String toolClassString) throws UnknownToolException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-        Tool toolObject = null;
+        Tool toolObject;
 
-        // ...
-        
+        if ((toolObject = toolsCache.get(toolClassString)) == null) {            
+            System.out.println("\nTool's Class: " + toolClassString);
+            if (toolClassString == null) {
+                throw new UnknownToolException();
+            }
+
+            Class operationClass = classLoader.loadClass(toolClassString);
+            toolObject = (Tool) operationClass.newInstance();
+            toolsCache.put(toolClassString, toolObject);
+        } else {
+            System.out.println("Tool: \"" + toolClassString + "\" already in Cache");
+        }
         return toolObject;
     }
 
     public static void main(String[] args) {
         // start the satellite
         Satellite satellite = new Satellite(args[0], args[1], args[2]);
-        satellite.run();
+        satellite.run();        
     }
 }
 
