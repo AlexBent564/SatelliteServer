@@ -215,8 +215,13 @@ public class Satellite extends Thread {
                     System.out.println(tempJob.getToolName());
                     try 
                     {
+                        // this gets the tool that is needed to run
                         Tool jobTool = getToolObject(tempJob.getToolName());
-                        jobTool.go(tempJob.getParameters());
+                        
+                        // this is the output after running the tool
+                        Object output = jobTool.go(tempJob.getParameters());
+                        System.out.println("[SatelliteThread.run] this is the output for the tool " + (Integer)output);
+                        
                         System.out.println();
                         System.out.println("[SatelliteThread.run] JOB_REQUEST ");
                     }
