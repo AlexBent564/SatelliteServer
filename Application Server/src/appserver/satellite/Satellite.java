@@ -33,7 +33,7 @@ public class Satellite extends Thread {
     private ConnectivityInfo serverInfo = new ConnectivityInfo();
     private HTTPClassLoader classLoader = null;
 //    private Hashtable toolsCache = null;
-    private HashMap <String, Tool> toolsCache = new HashMap<>();
+    private HashMap <String, Tool> toolsCache = null;
     static ServerSocket serverSocket;
     static int port;
     protected Socket socket;
@@ -109,7 +109,7 @@ public class Satellite extends Thread {
 
         
         // create tools cache
-        // -------------------
+        toolsCache = new HashMap<>();
         
         
     }
@@ -127,7 +127,7 @@ public class Satellite extends Thread {
         // ---------------------------------------------------------------
         try
         {
-            port = serverInfo.getPort();
+            port = satelliteInfo.getPort();
             serverSocket = new ServerSocket( port );
             System.out.println( "[Satellite.run] Server socket created on port #" + port );
             
@@ -152,7 +152,7 @@ public class Satellite extends Thread {
                 
                 // not sure if this is correct, but the above comment states that we should take job requests which is what the 
                 SatelliteThread satelliteThread = new SatelliteThread(socket, this);
-                satelliteThread.run();
+                satelliteThread.start();
                 
                 
             }
@@ -212,12 +212,15 @@ public class Satellite extends Thread {
                     // processing job request\
                     Tool jobTool;
                     
-                    try {
+                    try 
+                    {
                         jobTool = getToolObject((String)message.getContent());
                     }
                     catch ( UnknownToolException | ClassNotFoundException | InstantiationException | IllegalAccessException e )
                     {
+                        System.out.println( "[SatelliteThread.run] JOB_REQUEST could not be reached, bailing now..." );
                         e.printStackTrace();
+                        System.exit( 1 );
                     }
                     
                     break;
@@ -258,4 +261,3 @@ public class Satellite extends Thread {
         satellite.run();        
     }
 }
-
