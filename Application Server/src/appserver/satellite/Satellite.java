@@ -210,11 +210,15 @@ public class Satellite extends Thread {
             switch (message.getType()) {
                 case JOB_REQUEST:
                     // processing job request\
-                    Tool jobTool;
                     
+                    Job tempJob = (Job)message.getContent();
+                    System.out.println(tempJob.getToolName());
                     try 
                     {
-                        jobTool = getToolObject((String)message.getContent());
+                        Tool jobTool = getToolObject(tempJob.getToolName());
+                        jobTool.go(tempJob.getParameters());
+                        System.out.println();
+                        System.out.println("[SatelliteThread.run] JOB_REQUEST ");
                     }
                     catch ( UnknownToolException | ClassNotFoundException | InstantiationException | IllegalAccessException e )
                     {
