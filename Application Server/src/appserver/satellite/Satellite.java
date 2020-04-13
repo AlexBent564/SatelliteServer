@@ -224,8 +224,9 @@ public class Satellite extends Thread {
                         
                         System.out.println();
                         System.out.println("[SatelliteThread.run] JOB_REQUEST ");
+                        writeToNet.writeObject( output );
                     }
-                    catch ( UnknownToolException | ClassNotFoundException | InstantiationException | IllegalAccessException e )
+                    catch ( IOException | UnknownToolException | ClassNotFoundException | InstantiationException | IllegalAccessException e )
                     {
                         System.out.println( "[SatelliteThread.run] JOB_REQUEST could not be reached, bailing now..." );
                         e.printStackTrace();

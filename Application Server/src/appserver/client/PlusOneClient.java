@@ -37,22 +37,29 @@ public class PlusOneClient implements MessageTypes{
     public void run() {
         try { 
             // connect to application server
+            System.out.println( "[PlusOneClient.run] Attempting to connect to server..." );
             Socket server = new Socket(host, port);
+            System.out.println( "[PlusOneClient.run] Connected to server!" );
             
             // hard-coded string of class, aka tool name ... plus one argument
             String classString = "appserver.job.impl.PlusOne";
             Integer number = new Integer(42);
             
             // create job and job request message
+            System.out.println( "[PlusOneClient.run] Creating job request message now..." );
             Job job = new Job(classString, number);
             Message message = new Message(JOB_REQUEST, job);
+            System.out.println( "[PlusOneClient.run] Message sent successfully!" );
             
             // sending job out to the application server in a message
+            System.out.println( "[PlusOneClient.run] Sending out job requeset now...");
             ObjectOutputStream writeToNet = new ObjectOutputStream(server.getOutputStream());
             writeToNet.writeObject(message);
+            System.out.println( "[PlusOneClient.run] Job request successfully sent!" );
             
             // reading result back in from application server
             // for simplicity, the result is not encapsulated in a message
+            System.out.println( "[PlusOneClient.run] Reading result now..." );
             ObjectInputStream readFromNet = new ObjectInputStream(server.getInputStream());
             Integer result = (Integer) readFromNet.readObject();
             System.out.println("RESULT: " + result);
