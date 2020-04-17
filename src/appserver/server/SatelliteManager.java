@@ -14,15 +14,24 @@ public class SatelliteManager {
     static private Hashtable<String, ConnectivityInfo> satellites = null;
 
     public SatelliteManager() {
-        // ..
+        satellites = new Hashtable<String, ConnectivityInfo>();
     }
 
     public void registerSatellite(ConnectivityInfo satelliteInfo) {
-        // ...
+        if (satellites.contains(satelliteInfo))
+        {
+            System.out.println("[SatelliteManager] this satellite already exists");
+        }
+        else
+        {
+            satellites.put(satelliteInfo.getName(), satelliteInfo);
+        }
+        
     }
 
     public ConnectivityInfo getSatelliteForName(String satelliteName) {
-        //temp 'null'; return something else
-        return null;// ..
+        
+        // find the satellite in the hashtable and return it
+        return satellites.get(satelliteName);
     }
 }
