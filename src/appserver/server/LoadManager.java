@@ -29,8 +29,8 @@ public class LoadManager {
             // implement policy that returns the satellite name according to a round robin methodology
             // ...
         }
-
-        return // ... name of satellite who is supposed to take job
-        ;
+        //filler value 'null'; return something else
+        return null; // ... name of satellite who is supposed to take job
+        
     }
 }

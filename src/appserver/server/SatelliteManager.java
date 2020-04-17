@@ -22,6 +22,7 @@ public class SatelliteManager {
     }
 
     public ConnectivityInfo getSatelliteForName(String satelliteName) {
-        // ..
+        //temp 'null'; return something else
+        return null;// ..
     }
 }
