@@ -114,6 +114,8 @@ public class Satellite extends Thread {
         
     }
 
+
+
     @Override
     public void run() {
         
