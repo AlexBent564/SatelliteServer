@@ -20,13 +20,13 @@ public class LoadManager{
     public void satelliteAdded(String satelliteName) {
         // add satellite
         // ...
-//        Satellite s1 = new Satellite();
+        satellites.add(satelliteName);
     }
 
 
     public String nextSatellite() throws Exception {
         
-//        int numberSatellites = satellites.length();
+        int numberSatellites = satellites.length();
         int index;
         
         synchronized (satellites) {
@@ -34,11 +34,11 @@ public class LoadManager{
             // ...
             //loop through array list of sattelites (sattelitemanager has connectivity info)
             //until rach end of array list, if at end of array list restart to begin at beginning
-//            
-//            for( index = 0; index < numberSatellites; index++ )
-//            {
-//                return satellites[index];
-//            }
+            
+            for( index = 0; index < numberSatellites; index++ )
+            {
+                return satellites[index];
+            }
         }
         //filler value 'null'; return something else
         return null; // ... name of satellite who is supposed to take job
