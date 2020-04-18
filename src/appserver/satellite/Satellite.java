@@ -119,10 +119,23 @@ public class Satellite extends Thread {
     @Override
     public void run() {
         
-        // ignore registering the satellite for now
         // register this satellite with the SatelliteManager on the server
         // ---------------------------------------------------------------
-        // ...
+        try
+        {
+            System.out.println( "[Satellite.run] Creating message to register satellite..." );
+            Message message = new Message( REGISTER_SATELLITE, satelliteInfo );
+            System.out.println( "[Satellite.run] Message created, sending out now...");
+            ObjectOutputStream writeToNet = new ObjectOutputStream( socket.getOutputStream() );
+            writeToNet.writeObject( message );
+            System.out.println( "[Satellite.run] Request successfully sent to server!" );
+        }
+        catch( Exception e )
+        {
+            System.out.println( "[Satellite.run] Error while registering satellite, bailing now..." );
+            e.printStackTrace();
+            System.exit( 1 );
+        }
         
         
         // create server socket
