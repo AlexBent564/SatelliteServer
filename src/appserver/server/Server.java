@@ -22,20 +22,51 @@ public class Server {
     static SatelliteManager satelliteManager = null;
     static LoadManager loadManager = null;
     static ServerSocket serverSocket = null;
+    
+    // port we will create server socket with
+    int port;
 
     public Server(String serverPropertiesFile) {
 
         // create satellite manager and load manager
-        // ...
+        satelliteManager = new SatelliteManager();
+        loadManager = new LoadManager();
         
         // read server properties and create server socket
-        // ...
+        try
+        {
+            Properties serverProperties = new PropertyHandler( serverPropertiesFile );
+            port = Integer.parseInt( serverProperties.getProperty( "PORT" ) );
+            ServerSocket serverSocket = new ServerSocket( port );
+            System.out.println( "[Server.Server] Created server socket on port #" + port );
+        }
+        catch( IOException e )
+        {
+            System.out.println( "[Server.Server] Could not find server properties file, bailing now..." );
+            e.printStackTrace();
+            System.exit( 1 );
+        }
+        this.port = port;
     }
 
     public void run() {
-    // serve clients in server loop ...
-    // when a request comes in, a ServerThread object is spawned
-    // ...
+        // serve clients in server loop ...
+        // when a request comes in, a ServerThread object is spawned
+        try
+        {
+            while( true )
+            {
+                System.out.println( "[Server.run] Waiting for connections on port #" + port );
+                serverSocket.accept();
+                System.out.println( "[Server.run] Client connection established!" );
+            }
+        }
+        catch( IOException e )
+        {
+            System.out.println( "[Server.run] Error occured while accepting clients, bailing now..." );
+            e.printStackTrace();
+            System.exit( 1 );
+        }
     }
 
     // objects of this helper class communicate with satellites or clients
@@ -53,7 +84,20 @@ public class Server {
         @Override
         public void run() {
             // set up object streams and read message
-            // ...
+            try
+            {
+                readFromNet = new ObjectInputStream( client.getInputStream() );
+                writeToNet = new ObjectOutputStream( client.getOutputStream() );
+                System.out.println( "[ServerThread.run] Object streams successfully set up, reading message now..." );
+                message = ( Message )readFromNet.readObject();
+                System.out.println( "[ServerThread.run] Message read successfully!" );
+            }
+            catch( IOException | ClassNotFoundException e )
+            {
+                System.out.println( "[ServerThread.run] Error creating object streams or reading message, bailing now..." );
+                e.printStackTrace();
+                System.exit( 1 );
+            }
 
             
             // process message
