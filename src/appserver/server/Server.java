@@ -59,6 +59,10 @@ public class Server {
                 System.out.println( "[Server.run] Waiting for connections on port #" + port );
                 serverSocket.accept();
                 System.out.println( "[Server.run] Client connection established!" );
+                // is this where the serverThread runs?
+                    // definitely not sure about this 
+                ServerThread serverThread = new ServerThread(serverSocket.accept());
+                serverThread.run();
             }
         }
         catch( IOException e )
@@ -72,10 +76,18 @@ public class Server {
     // objects of this helper class communicate with satellites or clients
     private class ServerThread extends Thread {
 
+        
         Socket client = null;
         ObjectInputStream readFromNet = null;
         ObjectOutputStream writeToNet = null;
         Message message = null;
+        
+        //added variables that seemed necessary
+        ObjectInputStream readFromSatellite = null;
+        ObjectOutputStream writeToSatellite = null;
+        
+        // created this variable to keep track of the satelliteInfo, NOT SURE if that is correct
+        ConnectivityInfo satelliteInfo;
 
         private ServerThread(Socket client) {
             this.client = client;
@@ -102,18 +114,19 @@ public class Server {
             
             // process message
             switch (message.getType()) {
+                // not sure what file sends the REGISTER_MESSAGE message
                 case REGISTER_SATELLITE:
                     // read satellite info
-                    // ...
                     
+                    satelliteInfo = (ConnectivityInfo) message.getContent();
                     // register satellite
                     synchronized (Server.satelliteManager) {
-                        // ...
+                        Server.satelliteManager.registerSatellite(satelliteInfo);
                     }
 
                     // add satellite to loadManager
                     synchronized (Server.loadManager) {
-                        // ...
+                        Server.loadManager.satelliteAdded(satelliteInfo.getName());
                     }
 
                     break;
@@ -124,21 +137,50 @@ public class Server {
                     String satelliteName = null;
                     synchronized (Server.loadManager) {
                         // get next satellite from load manager
-                        // ...
+                        try 
+                        {
+                            satelliteName = Server.loadManager.nextSatellite();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                            System.out.println("[ServerThread.java] There was a problem locating the next satellite");
+                        }
                         
                         // get connectivity info for next satellite from satellite manager
-                        // ...
+                        satelliteInfo = Server.satelliteManager.getSatelliteForName(satelliteName);
                     }
 
                     Socket satellite = null;
                     // connect to satellite
-                    // ...
+                    try
+                    {
+                        satellite = new Socket(satelliteInfo.getHost(), satelliteInfo.getPort());
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println("[ServerThread.java] there was a problem connecting to the satellite");
+                        e.printStackTrace();
+                    }
 
                     // open object streams,
                     // forward message (as is) to satellite,
                     // receive result from satellite and
                     // write result back to client
-                    // ...
+                    try
+                    {
+                        readFromSatellite = new ObjectInputStream(satellite.getInputStream());
+                        writeToSatellite = new ObjectOutputStream(satellite.getOutputStream());
+                        writeToSatellite.writeObject(message);
+                        message = (Message)readFromSatellite.readObject();
+                        writeToNet.writeObject(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.out.println("[ServerThread.java] There was a problem reading and writing from the satellite");
+                        ex.printStackTrace();
+                    }
+                    
 
                     break;
 
