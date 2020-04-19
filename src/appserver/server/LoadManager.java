@@ -7,53 +7,63 @@ import appserver.satellite.Satellite;
  *
  * @author Dr.-Ing. Wolf-Dieter Otte
  */
-public class LoadManager{
+public class LoadManager
+{
 
     static ArrayList satellites = null;
     static int lastSatelliteIndex = -1;
 
 
-    public LoadManager() {
+    public LoadManager()
+    {
         satellites = new ArrayList<String>();
     }
 
-    public void satelliteAdded(String satelliteName) {
+    public void satelliteAdded(String satelliteName)
+    {
         // add satellite
         // ...
-        satellites.add(satelliteName);
+        if(!satellites.contains(satelliteName))
+        {
+            satellites.add(satelliteName);
+        }
     }
 
 
-    public String nextSatellite() throws Exception {
+    public String nextSatellite() throws Exception
+    {
         
         int numberSatellites = satellites.size();
+        int firstIndex = 0;
         int index = 0;
+        String satelliteName = (String) satellites.get(index);
+//        String satelliteNext = (String) satellites.get(index + 1);
+
         
-        synchronized (satellites) {
+        synchronized (satellites)
+        {
             // implement policy that returns the satellite name according to a round robin methodology
             // ...
             //loop through array list of sattelites (sattelitemanager has connectivity info)
             //until rach end of array list, if at end of array list restart to begin at beginning
             
-           
-                
-        while( true ) //TODO:now I just need to properly implement round robin
-        {
-            boolean done = true;
-        
-            for( index = 0; index < numberSatellites; index++ )
+            if( index == lastSatelliteIndex )
             {
-                System.out.println( (String) satellites.get(index)); //test print
-                return (String) satellites.get(index);
+                index = firstIndex;
+                return satelliteName;
             }
-            index = 0;
-            done = false;
-        }
-             // ... name of satellite who is supposed to take job
-
+            else
+            {
+                index += 1;
+                return satelliteName;
+            }
+            
             
         }
+             // ... name of satellite who is supposed to take job
+            
+    }
         //filler value 'null'; return something else
         
-    }
 }
+
