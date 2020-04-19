@@ -23,9 +23,11 @@ public class LoadManager
     {
         // add satellite
         // ...
+        
         if(!satellites.contains(satelliteName))
         {
             satellites.add(satelliteName);
+            System.out.println("Satellite added: " + satelliteName);
         }
     }
 
@@ -34,8 +36,9 @@ public class LoadManager
     {
         
         int numberSatellites = satellites.size();
+        int index = numberSatellites - 1;
+        int nextIndex = index + 1;
         int firstIndex = 0;
-        int index = 0;
         String satelliteName = (String) satellites.get(index);
 //        String satelliteNext = (String) satellites.get(index + 1);
 
@@ -47,16 +50,20 @@ public class LoadManager
             //loop through array list of sattelites (sattelitemanager has connectivity info)
             //until rach end of array list, if at end of array list restart to begin at beginning
             
-            if( index == lastSatelliteIndex )
-            {
+                if( nextIndex == lastSatelliteIndex )
+                {
                 index = firstIndex;
                 return satelliteName;
-            }
-            else
-            {
+                }
+                
+                else
+                {
                 index += 1;
                 return satelliteName;
-            }
+                }
+                
+            
+            
             
             
         }
