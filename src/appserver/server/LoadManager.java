@@ -11,7 +11,7 @@ public class LoadManager
 {
 
     static ArrayList satellites = null;
-    static int lastSatelliteIndex = (satellites.size() -1);
+    static int lastSatelliteIndex;
     
     int nextIndex = -1;
     
@@ -31,6 +31,7 @@ public class LoadManager
         {
             satellites.add(satelliteName);
             System.out.println("Satellite added: " + satelliteName);
+            lastSatelliteIndex = (satellites.size() - 1);
         }
     }
 
@@ -62,19 +63,17 @@ public class LoadManager
         {
             // implement policy that returns the satellite name according to a round robin methodology
             // ...
-            //loop through array list of sattelites (sattelitemanager has connectivity info)
-            //until rach end of array list, if at end of array list restart to begin at beginning
             
-                if( nextIndex > lastSatelliteIndex )
-                {
+            if( nextIndex > lastSatelliteIndex )
+            {
                 nextIndex = firstIndex;
                 return satelliteName;
-                }
+            }
                 
-                else
-                {
+            else
+            {
                 return satelliteName;
-                }
+            }
             
         }
              // ... name of satellite who is supposed to take job
