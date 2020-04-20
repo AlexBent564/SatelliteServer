@@ -57,12 +57,12 @@ public class Server {
             while( true )
             {
                 System.out.println( "[Server.run] Waiting for connections on port #" + port );
-                serverSocket.accept();
+                Socket tempSock = serverSocket.accept();
                 System.out.println( "[Server.run] Client connection established!" );
                 // is this where the serverThread runs?
                     // definitely not sure about this 
-                ServerThread serverThread = new ServerThread(serverSocket.accept());
-                serverThread.run();
+                ServerThread serverThread = new ServerThread(tempSock);
+                serverThread.start();
             }
         }
         catch( IOException e )
@@ -149,6 +149,8 @@ public class Server {
                         
                         // get connectivity info for next satellite from satellite manager
                         satelliteInfo = Server.satelliteManager.getSatelliteForName(satelliteName);
+                        System.out.println("[ServerThread.run] THIS IS THE TEST CODE FOR RETRIEVING THE SATELLITE NAME");
+                        System.out.println(satelliteInfo.getName());
                     }
 
                     Socket satellite = null;
@@ -171,6 +173,7 @@ public class Server {
                     {
                         readFromSatellite = new ObjectInputStream(satellite.getInputStream());
                         writeToSatellite = new ObjectOutputStream(satellite.getOutputStream());
+                        System.out.println("[ServerThread.java] the satellite object streams have been set up");
                         writeToSatellite.writeObject(message);
                         message = (Message)readFromSatellite.readObject();
                         writeToNet.writeObject(message);
