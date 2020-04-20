@@ -38,11 +38,11 @@ public class LoadManager
     public String nextSatellite() throws Exception
     {
         index += 1;
-        int numberSatellites = satellites.size();
+//      int numberSatellites = satellites.size();
 //      int nextIndex = index + 1;
         int firstIndex = 0;
         String satelliteName = (String) satellites.get(index);
-//        String satelliteNext = (String) satellites.get(index + 1);
+//      String satelliteNext = (String) satellites.get(index + 1);
 
         
         synchronized (satellites)
@@ -62,10 +62,6 @@ public class LoadManager
                 {
                 return satelliteName;
                 }
-                
-            
-            
-            
             
         }
              // ... name of satellite who is supposed to take job
