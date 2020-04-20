@@ -38,12 +38,17 @@ public class LoadManager
     public String nextSatellite() throws Exception
     {
         index += 1;
-//      int numberSatellites = satellites.size();
+        int numberSatellites = satellites.size();
 //      int nextIndex = index + 1;
         int firstIndex = 0;
         String satelliteName = (String) satellites.get(index);
 //      String satelliteNext = (String) satellites.get(index + 1);
 
+        for( int test = 0; test < numberSatellites - 1; test ++ )
+        {
+            System.out.println(satelliteName);
+
+        }
         
         synchronized (satellites)
         {
@@ -70,4 +75,3 @@ public class LoadManager
         //filler value 'null'; return something else
         
 }
-
