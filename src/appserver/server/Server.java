@@ -148,9 +148,7 @@ public class Server {
                         }
                         
                         // get connectivity info for next satellite from satellite manager
-                        satelliteInfo = Server.satelliteManager.getSatelliteForName(satelliteName);
-                        System.out.println("[ServerThread.run] THIS IS THE TEST CODE FOR RETRIEVING THE SATELLITE NAME");
-                        System.out.println(satelliteInfo.getName());
+                        satelliteInfo = Server.satelliteManager.getSatelliteForName(satelliteName);                        
                     }
 
                     Socket satellite = null;
