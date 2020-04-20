@@ -37,25 +37,20 @@ public class LoadManager
 
     public String nextSatellite() throws Exception
     {
-<<<<<<< Updated upstream
-        index += 1;
-=======
+
         nextIndex += 1;
->>>>>>> Stashed changes
         int numberSatellites = satellites.size();
 //      int nextIndex = index + 1;
         int firstIndex = 0;
         String satelliteName = (String) satellites.get(index);
 //      String satelliteNext = (String) satellites.get(index + 1);
-<<<<<<< Updated upstream
+
 
         for( int test = 0; test < numberSatellites - 1; test ++ )
         {
             System.out.println(satelliteName);
 
         }
-=======
->>>>>>> Stashed changes
         
 //        for( int test = 0; test < numberSatellites - 1; test ++ )
 //        {
