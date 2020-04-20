@@ -42,7 +42,7 @@ public class LoadManager
         int numberSatellites = satellites.size();
 //      int nextIndex = index + 1;
         int firstIndex = 0;
-        String satelliteName = (String) satellites.get(index);
+        String satelliteName = (String) satellites.get(nextIndex);
 //      String satelliteNext = (String) satellites.get(index + 1);
 
 
