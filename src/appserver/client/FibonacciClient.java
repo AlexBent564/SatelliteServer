@@ -79,7 +79,7 @@ public class FibonacciClient extends Thread implements MessageTypes{
     public static void main(String[] args) {
         
         // Spawns off 48 threads computing numbers from 1-48
-        for( int index = 10; index > 0; index-- )
+        for( int index = 48; index > 0; index-- )
         {
             (new FibonacciClient( "../../config/Server.properties", index ) ).start();
         }
