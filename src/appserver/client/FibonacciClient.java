@@ -80,9 +80,7 @@ public class FibonacciClient extends Thread implements MessageTypes{
         // Spawns off 48 threads computing numbers from 1-48
         for( int index = 10; index > 0; index-- )
         {
-            (new FibonacciClient( "../../config/Satellite.Earth.properties", index ) ).start();
-            (new FibonacciClient( "../../config/Satellite.Venus.properties", index ) ).start();
-            (new FibonacciClient( "../../config/Satellite.Mercury.properties", index ) ).start();
+            (new FibonacciClient( "../../config/Server.properties", index ) ).start();
         }
     }  
 }
