@@ -114,8 +114,6 @@ public class Satellite extends Thread {
         
     }
 
-
-
     @Override
     public void run() {
         
@@ -126,7 +124,8 @@ public class Satellite extends Thread {
             System.out.println( "[Satellite.run] Creating message to register satellite..." );
             Message message = new Message( REGISTER_SATELLITE, satelliteInfo );
             System.out.println( "[Satellite.run] Message created, sending out now...");
-            ObjectOutputStream writeToNet = new ObjectOutputStream( socket.getOutputStream() );
+            Socket server = new Socket( serverInfo.getHost(), serverInfo.getPort() );
+            ObjectOutputStream writeToNet = new ObjectOutputStream( server.getOutputStream() );
             writeToNet.writeObject( message );
             System.out.println( "[Satellite.run] Request successfully sent to server!" );
         }
