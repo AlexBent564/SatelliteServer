@@ -37,7 +37,7 @@ public class Server {
         {
             Properties serverProperties = new PropertyHandler( serverPropertiesFile );
             port = Integer.parseInt( serverProperties.getProperty( "PORT" ) );
-            ServerSocket serverSocket = new ServerSocket( port );
+            serverSocket = new ServerSocket( port );
             System.out.println( "[Server.Server] Created server socket on port #" + port );
         }
         catch( IOException e )
