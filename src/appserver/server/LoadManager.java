@@ -12,6 +12,9 @@ public class LoadManager
 
     static ArrayList satellites = null;
     static int lastSatelliteIndex = -1;
+    
+    int index = -1;
+    
 
 
     public LoadManager()
@@ -34,10 +37,9 @@ public class LoadManager
 
     public String nextSatellite() throws Exception
     {
-        
+        index += 1;
         int numberSatellites = satellites.size();
-        int index = numberSatellites - 1;
-        int nextIndex = index + 1;
+//      int nextIndex = index + 1;
         int firstIndex = 0;
         String satelliteName = (String) satellites.get(index);
 //        String satelliteNext = (String) satellites.get(index + 1);
@@ -50,7 +52,7 @@ public class LoadManager
             //loop through array list of sattelites (sattelitemanager has connectivity info)
             //until rach end of array list, if at end of array list restart to begin at beginning
             
-                if( nextIndex == lastSatelliteIndex )
+                if( index == lastSatelliteIndex )
                 {
                 index = firstIndex;
                 return satelliteName;
@@ -58,7 +60,6 @@ public class LoadManager
                 
                 else
                 {
-                index += 1;
                 return satelliteName;
                 }
                 
