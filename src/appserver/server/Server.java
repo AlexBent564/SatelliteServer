@@ -169,12 +169,12 @@ public class Server {
                     // write result back to client
                     try
                     {
-                        readFromSatellite = new ObjectInputStream(satellite.getInputStream());
                         writeToSatellite = new ObjectOutputStream(satellite.getOutputStream());
+                        readFromSatellite = new ObjectInputStream(satellite.getInputStream());
                         System.out.println("[ServerThread.java] the satellite object streams have been set up");
                         writeToSatellite.writeObject(message);
-                        message = (Message)readFromSatellite.readObject();
-                        writeToNet.writeObject(message);
+                        Message newMessage = (Message)readFromSatellite.readObject();
+                        writeToNet.writeObject(newMessage);
                     }
                     catch (Exception ex)
                     {
