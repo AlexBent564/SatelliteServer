@@ -11,9 +11,9 @@ public class LoadManager
 {
 
     static ArrayList satellites = null;
-    static int lastSatelliteIndex = -1;
+    static int lastSatelliteIndex = (satellites.size() -1);
     
-    int index = -1;
+    int nextIndex = -1;
     
 
 
@@ -37,19 +37,32 @@ public class LoadManager
 
     public String nextSatellite() throws Exception
     {
+<<<<<<< Updated upstream
         index += 1;
+=======
+        nextIndex += 1;
+>>>>>>> Stashed changes
         int numberSatellites = satellites.size();
 //      int nextIndex = index + 1;
         int firstIndex = 0;
         String satelliteName = (String) satellites.get(index);
 //      String satelliteNext = (String) satellites.get(index + 1);
+<<<<<<< Updated upstream
 
         for( int test = 0; test < numberSatellites - 1; test ++ )
         {
             System.out.println(satelliteName);
 
         }
+=======
+>>>>>>> Stashed changes
         
+//        for( int test = 0; test < numberSatellites - 1; test ++ )
+//        {
+//            System.out.println(satelliteName);
+//
+//        }
+
         synchronized (satellites)
         {
             // implement policy that returns the satellite name according to a round robin methodology
@@ -57,9 +70,9 @@ public class LoadManager
             //loop through array list of sattelites (sattelitemanager has connectivity info)
             //until rach end of array list, if at end of array list restart to begin at beginning
             
-                if( index == lastSatelliteIndex )
+                if( nextIndex > lastSatelliteIndex )
                 {
-                index = firstIndex;
+                nextIndex = firstIndex;
                 return satelliteName;
                 }
                 
