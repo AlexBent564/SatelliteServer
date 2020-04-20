@@ -27,11 +27,13 @@ public class FibonacciClient extends Thread implements MessageTypes{
 
     public FibonacciClient(String serverPropertiesFile, int number) {
         try {
+            // obtain properties from file
             properties = new PropertyHandler(serverPropertiesFile);
             host = properties.getProperty("HOST");
             System.out.println("[FibonacciClient.FibonacciClient] Host: " + host);
             port = Integer.parseInt(properties.getProperty("PORT"));
             System.out.println("[FibonacciClient.FibonacciClient] Port: " + port);
+            // obtain number to work with from second argument
             this.fibonacciNumber = number;
         } catch (Exception ex) {
             System.out.println( "[FibonacciClient.FibonacciClient] Could not find properties file, bailing now..." );
@@ -47,15 +49,15 @@ public class FibonacciClient extends Thread implements MessageTypes{
             Socket server = new Socket(host, port);
             System.out.println( "[FibonacciClient.run] Connected to server!" );
             
-            // hard-coded string of class, aka tool name ... plus one argument
+            // hard-coded string of class, aka tool name ... Fibonacci argument
             String classString = "appserver.job.impl.Fibonacci";
-            Integer number = fibonacciNumber; // change this
+            Integer number = fibonacciNumber; 
             
             // create job and job request message
             System.out.println( "[FibonacciClient.run] Creating job request message now..." );
             Job job = new Job(classString, number);
             Message message = new Message(JOB_REQUEST, job);
-            System.out.println( "[FibonacciClient.run] Message sent successfully!" );
+            System.out.println( "[FibonacciClient.run] Message created successfully!" );
             
             // sending job out to the application server in a message
             System.out.println( "[FibonacciClient.run] Sending out job requeset now...");
@@ -64,7 +66,6 @@ public class FibonacciClient extends Thread implements MessageTypes{
             System.out.println( "[FibonacciClient.run] Job request successfully sent!" );
             
             // reading result back in from application server
-            // for simplicity, the result is not encapsulated in a message
             System.out.println( "[FibonacciClient.run] Reading result now..." );
             ObjectInputStream readFromNet = new ObjectInputStream(server.getInputStream());
             Integer result = (Integer) readFromNet.readObject();

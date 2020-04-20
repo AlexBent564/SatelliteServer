@@ -173,8 +173,13 @@ public class Server {
                         readFromSatellite = new ObjectInputStream(satellite.getInputStream());
                         System.out.println("[ServerThread.java] the satellite object streams have been set up");
                         writeToSatellite.writeObject(message);
-                        Message newMessage = (Message)readFromSatellite.readObject();
-                        writeToNet.writeObject(newMessage);
+                        System.out.println( "[ServerThread.java] Message has been forwarded to satellite!" );
+                        // read incoming object from satellite containing result
+                        Object incoming = readFromSatellite.readObject();
+                        System.out.println( "[ServerThread.java] Result obtained from satellite!" );
+                        // send result back to client
+                        writeToNet.writeObject(incoming);
+                        System.out.println( "[ServerThread.java] Result sent to client!" );
                     }
                     catch (Exception ex)
                     {
